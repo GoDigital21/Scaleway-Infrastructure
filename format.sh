@@ -1,10 +1,5 @@
-#check if dev/sdb is already formatted
-if [ -e /dev/sda ]; then
-    echo "sdb already formatted"
-else
-    echo "formatting sdb"
-    mkfs.ext4 /dev/sda
-fi
+#check if dev/sdb is already formatted and if not formats it
+blkid --match-token TYPE=ext4 /dev/sda || mkfs.ext4 /dev/sda
 
 #create /data mount point if it doesn't exist
 if [ -d /data ]; then
@@ -14,7 +9,7 @@ else
     mkdir /data
 fi
 
-#check if dev/sdb is already mounted
+#check if dev/sda is already mounted
 if grep -qs '/dev/sda' /proc/mounts; then
     echo "sdb already mounted"
 else
