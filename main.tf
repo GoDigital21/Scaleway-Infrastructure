@@ -67,7 +67,7 @@ resource "scaleway_account_ssh_key" "main" {
   public_key = tls_private_key.sshkey.public_key_openssh
 }
 
-resource "scaleway_instance_ip" "ip" {}
+resource "scaleway_instance_ip" "public_ip" {}
 
 resource "scaleway_instance_server" "docker" {
   type = "DEV1-S"
@@ -76,7 +76,7 @@ resource "scaleway_instance_server" "docker" {
 
   tags = [ "docker", "mainserver" ]
 
-  ip_id = scaleway_instance_ip.ip.id
+  ip_id = scaleway_instance_ip.public_ip.id
 
   connection {
     type        = "ssh"
