@@ -113,6 +113,21 @@ resource "scaleway_instance_server" "docker" {
     destination = "/tmp/daemon.json"
   }
 
+  provisioner "file" {
+    source      = "traefik-compose.yml"
+    destination = "/tmp/traefik-compose.yml"
+  }
+
+  provisioner "file" {
+    source      = "install_traefik.sh"
+    destination = "/tmp/install_traefik.sh"
+  }
+
+  provisioner "file" {
+    source      = "start_existing_containers.sh"
+    destination = "/tmp/start_existing_containers.sh"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/format.sh",
@@ -120,10 +135,24 @@ resource "scaleway_instance_server" "docker" {
     ]
   }
 
-    provisioner "remote-exec" {
+  provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/configure_docker.sh",
       "/tmp/configure_docker.sh args",
+    ]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/install_traefik.sh",
+      "/tmp/install_traefik.sh args",
+    ]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/start_existing_containers.sh",
+      "/tmp/start_existing_containers.sh args",
     ]
   }
 }

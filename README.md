@@ -14,3 +14,7 @@ mount it: mount -o defaults /dev/sdb /data
 
 gets automatically triggered on push to main!
 check https://app.terraform.io/app/godigital21/workspaces/Scaleway-Infrastructure
+
+
+easy treafik setup:
+https://medium.com/@rossinigiovanni/traefik-how-to-proxy-with-lets-encrypt-nginx-or-docker-a98f6d79626c

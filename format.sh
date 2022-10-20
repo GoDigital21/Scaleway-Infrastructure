@@ -24,3 +24,11 @@ else
     echo "adding sda to fstab"
     echo "/dev/sda /data ext4 defaults 0 0" >> /etc/fstab
 fi
+
+#create container directory if it doesn't exist
+if [ -d /data/containers ]; then
+    echo "/data/containers already exists"
+else
+    echo "creating /data/containers"
+    mkdir /data/containers
+fi
