@@ -103,11 +103,12 @@ resource "scaleway_instance_server" "docker" {
     destination = "/tmp/format.sh"
   }
 
-   provisioner "remote-exec" {
+  provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/format.sh",
       "/tmp/format.sh args",
     ]
+  }
 }
 
 resource "github_actions_organization_secret" "private_key_instance" {
