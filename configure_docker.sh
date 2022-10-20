@@ -4,7 +4,7 @@ sudo systemctl stop docker
 
 #check if data/docker exists
 if [ ! -d /data/docker ]; then
-  print("creating /data/docker")
+  echo "creating /data/docker"
   mkdir -p /data/docker
   sudo rsync -aP /var/lib/docker/ /data/docker
 fi
