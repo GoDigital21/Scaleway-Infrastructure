@@ -3,8 +3,16 @@ terraform {
     scaleway = {
       source = "scaleway/scaleway"
     }
+    github = {
+      source  = "integrations/github"
+    }
   }
   required_version = ">= 0.13"
+}
+
+provider "github" {
+  token = var.github_token # or `GITHUB_TOKEN`
+  owner = "GoDigital21"
 }
 
 provider "scaleway" {
@@ -46,3 +54,49 @@ provider "scaleway" {
 #}
 
 #--------- create database --------------
+
+
+#--------- create Instance --------------
+#generate sshkey
+resource "tls_private_key" "sshkey" {
+  algorithm = "ED25519"
+}
+
+resource "scaleway_account_ssh_key" "main" {
+  name       = "main"
+  public_key = tls_private_key.sshkey.public_key_openssh
+}
+
+resource "scaleway_instance_ip" "public_ip" {}
+
+#creates server
+resource "scaleway_instance_server" "docker" {
+  type  = "DEV1-S"
+  image = "docker"
+  name  = "docker-server"
+  ip_id = scaleway_instance_ip.public_ip.id
+
+  connection {
+    type        = "ssh"
+    user        = "root"
+    private_key = tls_private_key.sshkey.private_key_pem
+    host        = scaleway_instance_ip.public_ip.address
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt install ansible -y"
+    ]
+  }
+}
+
+resource "github_actions_organization_secret" "private_key_instance" {
+  visibility      = "all"
+  secret_name     = "INSTANCE_SSH"
+  plaintext_value = var.some_secret_string
+}
+
+resource "github_actions_secret" "ip_instance" {
+  visibility      = "all"
+  secret_name      = "INSTANCE_IP"
+  plaintext_value  = scaleway_instance_ip.public_ip.address
+}

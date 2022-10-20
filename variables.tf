@@ -5,3 +5,7 @@ variable "rdb_user_scaleway_db_password" {
 variable "rdb_user_root_password" {
   type = string
 }
+
+variable "github_token" {
+  type = string
+}
