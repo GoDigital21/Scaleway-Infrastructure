@@ -92,10 +92,10 @@ resource "scaleway_instance_server" "docker" {
 resource "github_actions_organization_secret" "private_key_instance" {
   visibility      = "all"
   secret_name     = "INSTANCE_SSH"
-  plaintext_value = var.some_secret_string
+  plaintext_value  = tls_private_key.sshkey.private_key_openssh
 }
 
-resource "github_actions_secret" "ip_instance" {
+resource "github_actions_organization_secret" "private_key_instance" {
   visibility      = "all"
   secret_name      = "INSTANCE_IP"
   plaintext_value  = scaleway_instance_ip.public_ip.address
