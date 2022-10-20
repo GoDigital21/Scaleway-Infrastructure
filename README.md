@@ -1,3 +1,14 @@
+# Infrastructure as Code: Setup Docker with Traefik
+
+This repository contains the code to setup a Docker environment with Traefik as a reverse proxy.
+It makes sure that all data is stored on a separate volume and that the Docker daemon is configured to use this volume.
+Further it installs traefik and configures it to use letsencrypt for SSL certificates and redirects all traffic to HTTPS.
+
+Everything is configured in a way that the machine can be easily destroyed and recreated without losing any data. Further it will also automatically start all containers that were running before the machine was destroyed.
+
+To manage the states, terraform cloud is used.
+## Notes:
+
 https://www.scaleway.com/en/docs/tutorials/terraform-quickstart/
 
 
