@@ -103,10 +103,27 @@ resource "scaleway_instance_server" "docker" {
     destination = "/tmp/format.sh"
   }
 
+  provisioner "file" {
+    source      = "configure_docker.sh"
+    destination = "/tmp/configure_docker.sh"
+  }
+
+  provisioner "file" {
+    source      = "daemon.json"
+    destination = "/tmp/daemon.json"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/format.sh",
       "/tmp/format.sh args",
+    ]
+  }
+
+    provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/configure_docker.sh",
+      "/tmp/configure_docker.sh args",
     ]
   }
 }
