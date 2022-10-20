@@ -67,25 +67,22 @@ resource "scaleway_account_ssh_key" "main" {
   public_key = tls_private_key.sshkey.public_key_openssh
 }
 
-resource "scaleway_instance_ip" "public_ip" {}
+resource "scaleway_instance_ip" "ip" {}
 
-#creates server
 resource "scaleway_instance_server" "docker" {
-  type  = "DEV1-S"
+  type = "DEV1-S"
   image = "docker"
   name  = "docker-server"
-  ip_id = scaleway_instance_ip.public_ip.id
+
+  tags = [ "docker", "mainserver" ]
+
+  ip_id = scaleway_instance_ip.ip.id
 
   connection {
     type        = "ssh"
     user        = "root"
     private_key = tls_private_key.sshkey.private_key_pem
     host        = scaleway_instance_ip.public_ip.address
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt install ansible -y"
-    ]
   }
 }
 
