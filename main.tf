@@ -69,6 +69,13 @@ resource "scaleway_account_ssh_key" "main" {
 
 resource "scaleway_instance_ip" "public_ip" {}
 
+resource "scaleway_instance_volume" "docker_data" {
+    type       = "b_ssd"
+    name       = "docker-data-volume"
+    size_in_gb = 50
+    tags= ["docker-data"]
+}
+
 resource "scaleway_instance_server" "docker" {
   type = "DEV1-S"
   image = "docker"
@@ -84,16 +91,33 @@ resource "scaleway_instance_server" "docker" {
     private_key = tls_private_key.sshkey.private_key_pem
     host        = scaleway_instance_ip.public_ip.address
   }
+
+  root_volume {
+    size_in_gb = 10
+  }
+
+  additional_volume_ids = [ scaleway_instance_volume.docker_data.id ]
+
+  provisioner "file" {
+    source      = "format.sh"
+    destination = "/tmp/format.sh"
+  }
+
+   provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/format.sh",
+      "/tmp/format.sh args",
+    ]
 }
 
 resource "github_actions_organization_secret" "private_key_instance" {
   visibility      = "all"
-  secret_name     = "INSTANCE_SSH"
+  secret_name     = "DOCKER_INSTANCE_IP"
   plaintext_value  = tls_private_key.sshkey.private_key_openssh
 }
 
 resource "github_actions_organization_secret" "ip_instance" {
   visibility      = "all"
-  secret_name      = "INSTANCE_IP"
+  secret_name      = "DOCKER_INSTANCE_IP"
   plaintext_value  = scaleway_instance_ip.public_ip.address
 }
