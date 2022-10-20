@@ -18,31 +18,31 @@ provider "scaleway" {
 #--------- create database --------------
 
 # create relational database with root user 
-resource "scaleway_rdb_instance" "main" {
-  name              = "main"
-  node_type         = "db-dev-s"
-  volume_type       = "bssd"
-  engine            = "PostgreSQL-14"
-  is_ha_cluster     = false
-  disable_backup    = false
-  volume_size_in_gb = "5"
-  user_name         = "root"
-  password          = var.rdb_user_root_password
-  tags = [ "terraform instance", "my-instance" ]
-}
+#resource "scaleway_rdb_instance" "main" {
+#  name              = "main"
+#  node_type         = "db-dev-s"
+#  volume_type       = "bssd"
+#  engine            = "PostgreSQL-14"
+#  is_ha_cluster     = false
+#  disable_backup    = false
+#  volume_size_in_gb = "5"
+#  user_name         = "root"
+#  password          = var.rdb_user_root_password
+#  tags = [ "terraform instance", "my-instance" ]
+#}
 
 # creates database inside the main database
-resource "scaleway_rdb_database" "test-rdb" {
-  instance_id = scaleway_rdb_instance.main.id
-  name        = "test-db"
-}
+#resource "scaleway_rdb_database" "test-rdb" {
+#  instance_id = scaleway_rdb_instance.main.id
+#  name        = "test-db"
+#}
 
 # create user for database
-resource "scaleway_rdb_user" "test-rdb-user" {
-  instance_id = scaleway_rdb_instance.main.id
-  name        = "test"
-  password    = var.rdb_user_scaleway_db_password
-  is_admin    = false
-}
+#resource "scaleway_rdb_user" "test-rdb-user" {
+#  instance_id = scaleway_rdb_instance.main.id
+#  name        = "test"
+#  password    = var.rdb_user_scaleway_db_password
+#  is_admin    = false
+#}
 
 #--------- create database --------------
