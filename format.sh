@@ -1,9 +1,3 @@
-#get name of external drive
-echo "Enter the name of the external drive"
-read drive
-#mount external drive
-sudo mount /dev/$drive /media/$drive
-
 #check if dev/sdb is already formatted
 if [ -e /dev/sda ]; then
     echo "sdb already formatted"
