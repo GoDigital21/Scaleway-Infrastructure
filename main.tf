@@ -23,9 +23,9 @@ resource "scaleway_rdb_instance" "main" {
   node_type         = "db-dev-s"
   volume_type       = "bssd"
   engine            = "PostgreSQL-14"
-  is_ha_cluster     = true
+  is_ha_cluster     = false
   disable_backup    = false
-  volume_size_in_gb = "10"
+  volume_size_in_gb = "5"
   user_name         = "root"
   password          = var.rdb_user_root_password
   tags = [ "terraform instance", "my-instance" ]
