@@ -19,7 +19,7 @@ provider "scaleway" {
   #access_key      = SCW_ACCESS_KEY
   #secret_key      = "<SCW_SECRET_KEY>"
   #project_id      = "<SCW_DEFAULT_PROJECT_ID>"
-  zone       = "fr-par-1"
+  zone       = "fr-par-2"
 }
 
 #--------- create Instance --------------
