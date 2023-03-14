@@ -64,6 +64,12 @@ resource "scaleway_instance_server" "docker" {
 
   additional_volume_ids = [ scaleway_instance_volume.docker_data.id ]
 
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir /maintenance",
+    ]
+  }
+
   provisioner "file" {
     source      = "format.sh"
     destination = "/tmp/format.sh"
@@ -90,8 +96,13 @@ resource "scaleway_instance_server" "docker" {
   }
 
   provisioner "file" {
+    source      = "clone_repos.sh"
+    destination = "/maintenance/clone_repos.sh"
+  }
+
+  provisioner "file" {
     source      = "start_existing_containers.sh"
-    destination = "/tmp/start_existing_containers.sh"
+    destination = "/maintenance/start_existing_containers.sh"
   }
 
   provisioner "remote-exec" {
@@ -117,8 +128,13 @@ resource "scaleway_instance_server" "docker" {
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/start_existing_containers.sh",
-      "/tmp/start_existing_containers.sh args",
+      "chmod +x /maintenance/clone_repos.sh",
+    ]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /maintenance/start_existing_containers.sh",
     ]
   }
 }

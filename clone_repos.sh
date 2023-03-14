@@ -1,15 +1,16 @@
-while read line; do
-  #check if repo already exists
-  #extract the repo name by splitting the line on the last /
-  repo_name=$(echo $line | awk -F'/' '{print $NF}')
-  if [ -d /data/containers/$repo_name ]; then
-    echo "$line already exists"
-    #pull the latest changes
-    cd /data/containers/$repo_name
-    git pull
-    echo "pulled latest changes"
-  else
-    echo "cloning $line"
-    git clone https://$github_username:$github_token@github.com/$line.git /data/containers
+#!/bin/bash
+
+GITHUB_USERNAME=$1
+GITHUB_TOKEN=$2
+REPOS_FILE="/maintenance/repos.txt"
+BASE_PATH="data/containers"
+
+while read -r repo; do
+  REPO_NAME=$repo
+  TARGET_PATH="$BASE_PATH/$REPO_NAME"
+
+  if [ ! -d "$TARGET_PATH" ]; then
+    echo "Cloning repository: $repo"
+    git clone "https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$line.git" "$TARGET_PATH"
   fi
-done < /tmp/repos.txt
+done < "$REPOS_FILE"
