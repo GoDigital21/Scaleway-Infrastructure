@@ -151,6 +151,19 @@ resource "github_actions_organization_secret" "ip_instance" {
   plaintext_value  = scaleway_instance_ip.public_ip.address
 }
 
+//SELF
+resource "github_actions_secret" "private_key_instance_mp" {
+  repository       = "Scaleway-Infrastructure-wp"
+  secret_name      = "DOCKER_INSTANCE_PRIVATE_KEY"
+  plaintext_value  = tls_private_key.sshkey.private_key_openssh
+}
+
+resource "github_actions_secret" "ip_instance_mp" {
+  repository       = "Scaleway-Infrastructure-wp"
+  secret_name      = "DOCKER_INSTANCE_IP"
+  plaintext_value  = scaleway_instance_ip.public_ip.address
+}
+
 //---- ADD TO REPOS -----
 
 //GoDigital21/godigital21-wp
