@@ -23,6 +23,6 @@ jobs:
 
     - name: Setup SSH and SCP
       run: |
-        scp repos.txt root@${{ secrets.DOCKER_INSTANCE_IP }}:/maintenance/repos.txt
+        scp -o StrictHostKeyChecking=no repos.txt root@${{ secrets.DOCKER_INSTANCE_IP }}:/maintenance/repos.txt
         ssh root@${{ secrets.DOCKER_INSTANCE_IP }} /maintenance/clone_repos.sh "${{ github.actor }}" "${{ secrets.GH_PAT }}"
         ssh root@${{ secrets.DOCKER_INSTANCE_IP }} /maintenance/start_existing_containers.sh
