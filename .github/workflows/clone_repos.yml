@@ -13,13 +13,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Wait for 1 minute
-      run: sleep 60
+      run: sleep 10
 
     - name: Setup SSH and SCP
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.DOCKER_INSTANCE_IP }}
         key: ${{ secrets.DOCKER_INSTANCE_PRIVATE_KEY }}
+        username: "root"
         script: |
           scp /github/workspace/repos.txt /maintenance/repos.txt
           ssh /maintenance/clone_repos.sh "${{ github.actor }}" "${{ secrets.GH_PAT }}"
