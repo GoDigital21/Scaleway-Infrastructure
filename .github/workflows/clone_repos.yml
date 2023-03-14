@@ -22,7 +22,8 @@ jobs:
         username: root
         key: ${{ secrets.DOCKER_INSTANCE_PRIVATE_KEY }}
         source: "repos.txt"
-        target: "/maintenance/repos.txt"
+        target: "/maintenance"
+        overwrite: true
 
     - name: deploy on remote server
       uses: appleboy/ssh-action@master
