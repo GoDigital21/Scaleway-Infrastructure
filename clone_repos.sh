@@ -16,6 +16,6 @@ while read -r repo; do
 
   if [ ! -d "$TARGET_PATH" ]; then
     echo "Cloning repository: $repo"
-    git clone "https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$line.git" "$TARGET_PATH"
+    git clone "https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/$REPO.git" "$TARGET_PATH"
   fi
 done < "$REPOS_FILE"
