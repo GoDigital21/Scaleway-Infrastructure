@@ -16,12 +16,12 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--certificatesresolvers.le.acme.tlschallenge=true"
       #- "--certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.le.acme.email=postmaster@shareyk.com"
+      - "--certificatesresolvers.le.acme.email=info@go-digital.de"
       - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
       - "443:443"
-#      - "8080:8080"
+#      - "8080:8080" ##access to webui
     volumes:
       - "/data/letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"

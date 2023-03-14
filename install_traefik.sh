@@ -10,8 +10,8 @@ fi
 
 mkdir /traefik
 
-mv /tmp/traefik-compose.yml /traefik/traefik-compose.yml
+mv /tmp/traefik-compose.yml /traefik/docker-compose.yml
 
-docker-compose -f /traefik/traefik-compose.yml up -d
+docker-compose up -d
 
 echo "Successfully started Traefik"

@@ -1,5 +1,6 @@
 #check if dev/sdb is already formatted and if not formats it
-blkid --match-token TYPE=ext4 /dev/sda || mkfs.ext4 /dev/sda
+#blkid --match-token TYPE=ext4 /dev/sdb || mkfs.ext4 /dev/sdb
+
 
 #create /data mount point if it doesn't exist
 if [ -d /data ]; then
@@ -9,20 +10,20 @@ else
     mkdir /data
 fi
 
-#check if dev/sda is already mounted
-if grep -qs '/dev/sda' /proc/mounts; then
+#check if dev/sdb is already mounted
+if grep -qs '/dev/sdb' /proc/mounts; then
     echo "sdb already mounted"
 else
-    echo "mounting sda"
-    mount /dev/sda /data
+    echo "mounting sdb"
+    mount /dev/sdb /data
 fi
 
-#make sure that sda is mounted automatically
-if grep -qs '/dev/sda' /etc/fstab; then
-    echo "sda already in fstab"
+#make sure that sdb is mounted automatically
+if grep -qs '/dev/sdb' /etc/fstab; then
+    echo "sdb already in fstab"
 else
-    echo "adding sda to fstab"
-    echo "/dev/sda /data ext4 defaults 0 0" >> /etc/fstab
+    echo "adding sdb to fstab"
+    echo "/dev/sdb /data ext4 defaults 0 0" >> /etc/fstab
 fi
 
 #create container directory if it doesn't exist
