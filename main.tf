@@ -22,6 +22,18 @@ provider "scaleway" {
   zone       = "fr-par-2"
 }
 
+//make use of the repos.txt file
+data "local_file" "repos" {
+  filename = "${path.module}/repos.txt"
+}
+
+locals {
+  repos = [
+    for repo in split("\n", chomp(data.local_file.repos.content)) :
+    element(split("/", repo), 1) if repo != "" && repo != "."
+  ]
+}
+
 #--------- create Instance --------------
 #generate sshkey
 resource "tls_private_key" "sshkey" {
@@ -153,28 +165,29 @@ resource "github_actions_organization_secret" "ip_instance" {
 
 //SELF
 resource "github_actions_secret" "private_key_instance_mp" {
-  repository       = "Scaleway-Infrastructure-wp"
+  repository       = "Scaleway-Infrastructure"
   secret_name      = "DOCKER_INSTANCE_PRIVATE_KEY"
   plaintext_value  = tls_private_key.sshkey.private_key_openssh
 }
 
 resource "github_actions_secret" "ip_instance_mp" {
-  repository       = "Scaleway-Infrastructure-wp"
+  repository       = "Scaleway-Infrastructure"
   secret_name      = "DOCKER_INSTANCE_IP"
   plaintext_value  = scaleway_instance_ip.public_ip.address
 }
 
 //---- ADD TO REPOS -----
 
-//GoDigital21/godigital21-wp
-resource "github_actions_secret" "private_key_instance_mp" {
-  repository       = "godigital21-wp"
-  secret_name      = "DOCKER_INSTANCE_PRIVATE_KEY"
-  plaintext_value  = tls_private_key.sshkey.private_key_openssh
-}
-
 resource "github_actions_secret" "ip_instance_mp" {
-  repository       = "godigital21-wp"
+  for_each         = toset(local.repos)
+  repository       = each.key
   secret_name      = "DOCKER_INSTANCE_IP"
   plaintext_value  = scaleway_instance_ip.public_ip.address
+}
+
+resource "github_actions_secret" "private_key_instance_mp" {
+  for_each         = toset(local.repos)
+  repository       = each.key
+  secret_name      = "DOCKER_INSTANCE_PRIVATE_KEY"
+  plaintext_value  = tls_private_key.sshkey.private_key_openssh
 }
