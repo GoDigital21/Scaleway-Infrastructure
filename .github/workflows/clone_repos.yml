@@ -22,6 +22,6 @@ jobs:
         key: ${{ secrets.DOCKER_INSTANCE_PRIVATE_KEY }}
         username: "root"
         script: |
-          scp repos.txt root@${{ secrets.SERVER_HOST }}:/maintenance/repos.txt
-          ssh root@${{ secrets.SERVER_HOST }} /maintenance/clone_repos.sh "${{ github.actor }}" "${{ secrets.GH_PAT }}"
-          ssh root@${{ secrets.SERVER_HOST }} /maintenance/start_existing_containers.sh
+          scp repos.txt root@${{ secrets.DOCKER_INSTANCE_IP }}:/maintenance/repos.txt
+          ssh root@${{ secrets.DOCKER_INSTANCE_IP }} /maintenance/clone_repos.sh "${{ github.actor }}" "${{ secrets.GH_PAT }}"
+          ssh root@${{ secrets.DOCKER_INSTANCE_IP }} /maintenance/start_existing_containers.sh
