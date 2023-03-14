@@ -125,12 +125,27 @@ resource "scaleway_instance_server" "docker" {
 
 resource "github_actions_organization_secret" "private_key_instance" {
   visibility      = "all"
-  secret_name     = "DOCKER_INSTANCE_IP"
+  secret_name     = "DOCKER_INSTANCE_PRIVATE_KEY"
   plaintext_value  = tls_private_key.sshkey.private_key_openssh
 }
 
 resource "github_actions_organization_secret" "ip_instance" {
   visibility      = "all"
+  secret_name      = "DOCKER_INSTANCE_IP"
+  plaintext_value  = scaleway_instance_ip.public_ip.address
+}
+
+//---- ADD TO REPOS -----
+
+//GoDigital21/godigital21-wp
+resource "github_actions_secret" "private_key_instance_mp" {
+  repository       = "godigital21-wp"
+  secret_name      = "DOCKER_INSTANCE_PRIVATE_KEY"
+  plaintext_value  = tls_private_key.sshkey.private_key_openssh
+}
+
+resource "github_actions_secret" "ip_instance_mp" {
+  repository       = "godigital21-wp"
   secret_name      = "DOCKER_INSTANCE_IP"
   plaintext_value  = scaleway_instance_ip.public_ip.address
 }
