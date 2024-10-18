@@ -1,2 +1,3 @@
 GoDigital21/godigital21-wp
+GoDigital21/hannicoco-wp
 .
