@@ -1,35 +1,47 @@
-#check if dev/sdb is already formatted and if not formats it
-#blkid --match-token TYPE=ext4 /dev/sdb || mkfs.ext4 /dev/sdb
+#!/bin/bash
 
+# Automatically find the correct device (50GB) based on its size
+DEVICE=$(lsblk -b -dn -o NAME,SIZE | grep -w 50000000000 | awk '{print $1}')
 
-#create /data mount point if it doesn't exist
+# If no device was found, exit the script
+if [ -z "$DEVICE" ]; then
+    echo "No 50GB device found"
+    exit 1
+fi
+
+DEVICE="/dev/$DEVICE"
+
+# Check if the found device is already formatted and format it if necessary
+blkid --match-token TYPE=ext4 "$DEVICE" || mkfs.ext4 "$DEVICE"
+
+# Create /data mount point if it doesn't exist
 if [ -d /data ]; then
     echo "/data already exists"
 else
-    echo "creating /data"
+    echo "Creating /data"
     mkdir /data
 fi
 
-#check if dev/sdb is already mounted
-if grep -qs '/dev/sdb' /proc/mounts; then
-    echo "sdb already mounted"
+# Check if the device is already mounted
+if grep -qs "$DEVICE" /proc/mounts; then
+    echo "$DEVICE already mounted"
 else
-    echo "mounting sdb"
-    mount /dev/sdb /data
+    echo "Mounting $DEVICE"
+    mount "$DEVICE" /data
 fi
 
-#make sure that sdb is mounted automatically
-if grep -qs '/dev/sdb' /etc/fstab; then
-    echo "sdb already in fstab"
+# Make sure that the device is mounted automatically on boot
+if grep -qs "$DEVICE" /etc/fstab; then
+    echo "$DEVICE already in fstab"
 else
-    echo "adding sdb to fstab"
-    echo "/dev/sdb /data ext4 defaults 0 0" >> /etc/fstab
+    echo "Adding $DEVICE to fstab"
+    echo "$DEVICE /data ext4 defaults 0 0" >> /etc/fstab
 fi
 
-#create container directory if it doesn't exist
+# Create /data/containers directory if it doesn't exist
 if [ -d /data/containers ]; then
     echo "/data/containers already exists"
 else
-    echo "creating /data/containers"
+    echo "Creating /data/containers"
     mkdir /data/containers
 fi
