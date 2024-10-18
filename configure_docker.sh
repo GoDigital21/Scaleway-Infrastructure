@@ -13,3 +13,6 @@ sudo mv /tmp/daemon.json /etc/docker/daemon.json
 
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+
+sudo apt-get update
+sudo apt-get install docker-compose-plugin

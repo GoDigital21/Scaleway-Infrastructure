@@ -14,6 +14,6 @@ mv /tmp/traefik-compose.yml /traefik/docker-compose.yml
 
 cd /traefik
 
-docker-compose up -d
+docker compose up -d
 
 echo "Successfully started Traefik"
