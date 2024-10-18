@@ -113,6 +113,11 @@ resource "scaleway_instance_server" "docker" {
   }
 
   provisioner "file" {
+    source      = "repos.txt"
+    destination = "/maintenance/repos.txt"
+  }
+
+  provisioner "file" {
     source      = "start_existing_containers.sh"
     destination = "/maintenance/start_existing_containers.sh"
   }
